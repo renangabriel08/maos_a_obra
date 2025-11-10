@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maos_a_obra/controllers/budget_controller.dart';
 import 'package:maos_a_obra/controllers/data_controller.dart';
+import 'package:maos_a_obra/controllers/evaluation_controller.dart';
+import 'package:maos_a_obra/widgets/toast.dart';
 
 class AssessmentScreen extends StatefulWidget {
   const AssessmentScreen({super.key});
@@ -11,6 +14,9 @@ class AssessmentScreen extends StatefulWidget {
 class _AssessmentScreenState extends State<AssessmentScreen> {
   int rating = 0;
   final TextEditingController feedbackController = TextEditingController();
+  final BudgetController budgetController = BudgetController();
+  final EvaluationController evaluationController = EvaluationController();
+  MyToast myToast = MyToast();
 
   void _setRating(int value) {
     setState(() {
@@ -18,12 +24,22 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     });
   }
 
-  void _submitFeedback() {
-    // Aqui você pode chamar seu controller pra salvar a avaliação
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Avaliação enviada com sucesso!")),
+  Future<void> _submitFeedback() async {
+    await budgetController.updateBudgetStatus(
+      DataController.selectedBudget!.id,
+      11,
+      context,
     );
-    Navigator.pop(context);
+
+    await evaluationController.submitEvaluation(
+      DataController.selectedBudget!.id,
+      rating,
+      feedbackController.text,
+      context,
+    );
+
+    myToast.getToast("Avaliação enviada com sucesso!");
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 
   @override
@@ -31,9 +47,7 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text(
-          "Avaliar serviço com ${DataController.selectedBudget!.prestador.name}",
-        ),
+        title: Text("Avaliar ${DataController.selectedBudget!.prestador.name}"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -62,27 +76,27 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
             ),
 
             const SizedBox(height: 20),
-            const Text(
-              "Compartilhe fotos do serviço concluído",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
+            // const Text(
+            //   "Compartilhe fotos do serviço concluído",
+            //   style: TextStyle(fontWeight: FontWeight.bold),
+            // ),
+            // const SizedBox(height: 8),
 
-            // botão de upload
-            OutlinedButton.icon(
-              onPressed: () {
-                // aqui depois pode chamar o ImagePicker
-              },
-              icon: const Icon(Icons.upload, color: Colors.indigo),
-              label: const Text("Carregar arquivos de mídia"),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                side: const BorderSide(color: Colors.indigo),
-                foregroundColor: Colors.indigo,
-              ),
-            ),
+            // // botão de upload
+            // OutlinedButton.icon(
+            //   onPressed: () {
+            //     // aqui depois pode chamar o ImagePicker
+            //   },
+            //   icon: const Icon(Icons.upload, color: Colors.indigo),
+            //   label: const Text("Carregar arquivos de mídia"),
+            //   style: OutlinedButton.styleFrom(
+            //     minimumSize: const Size(double.infinity, 50),
+            //     side: const BorderSide(color: Colors.indigo),
+            //     foregroundColor: Colors.indigo,
+            //   ),
+            // ),
 
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             const Text(
               "Conte-nos sobre serviço",
               style: TextStyle(fontWeight: FontWeight.bold),

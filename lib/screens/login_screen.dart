@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maos_a_obra/controllers/login_controller.dart';
+import 'package:maos_a_obra/styles/style.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,10 +10,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginController loginController = LoginController();
-  TextEditingController email = TextEditingController();
-  TextEditingController senha = TextEditingController();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final LoginController loginController = LoginController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController senha = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -24,179 +26,104 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.all(24),
             child: Form(
               key: formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Logo/Ícone
-                  Container(
-                    height: 80,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.blue[600],
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.handshake_rounded,
-                      size: 40,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 32),
+                  // Logo
+                  Image.asset('assets/imgs/Logo.png'),
+                  const SizedBox(height: 24),
 
                   // Título
                   Text(
-                    'Bem-vindo!',
+                    'Entrar',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Colors.grey[900],
+                      color: Color(AppColors.cinza),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Entre para continuar',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 40),
 
-                  // Campo E-mail
+                  // Campo de e-mail
                   TextFormField(
                     controller: email,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "E-mail",
-                      hintText: "seu@email.com",
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Colors.grey[600],
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[200]!),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.blue[600]!,
-                          width: 2,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                    ),
+                    decoration: AppDecorations.inputDecoration(
+                      'E-mail',
+                    ).copyWith(prefixIcon: const Icon(Icons.email_outlined)),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
-                  // Campo Senha
+                  // Campo de senha
                   TextFormField(
                     controller: senha,
                     obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      labelText: "Senha",
-                      hintText: "••••••••",
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        color: Colors.grey[600],
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined,
-                          color: Colors.grey[600],
+                    decoration: AppDecorations.inputDecoration('Senha')
+                        .copyWith(
+                          prefixIcon: const Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                              color: Colors.grey[600],
+                            ),
+                            onPressed: () {
+                              setState(
+                                () => _obscurePassword = !_obscurePassword,
+                              );
+                            },
+                          ),
                         ),
-                        onPressed: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
-                        },
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[200]!),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.blue[600]!,
-                          width: 2,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 16,
-                      ),
-                    ),
                   ),
+
+                  const SizedBox(height: 5),
 
                   // Esqueceu a senha
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // Implementar recuperação de senha
+                        Navigator.pushNamed(context, '/forgoPassword');
                       },
                       child: Text(
                         'Esqueceu a senha?',
                         style: TextStyle(
-                          color: Colors.blue[600],
-                          fontWeight: FontWeight.w600,
+                          color: Color(AppColors.cinza),
+                          fontSize: 16,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
 
-                  // Botão Login
+                  const SizedBox(height: 5),
+
+                  // Botão de login
                   SizedBox(
-                    height: 56,
+                    width: width,
+                    height: 60,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[600],
-                        foregroundColor: Colors.white,
-                        elevation: 0,
+                        backgroundColor: Color(AppColors.roxo),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        shadowColor: Colors.blue.withOpacity(0.3),
                       ),
-                      onPressed: _isLoading ? null : () => logar(),
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              await logar();
+                            },
                       child: _isLoading
                           ? const SizedBox(
                               height: 24,
@@ -207,61 +134,73 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             )
                           : const Text(
-                              "Entrar",
+                              'Entrar',
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontSize: 20,
                               ),
                             ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+
+                  const SizedBox(height: 20),
+
+                  // Botão de cadastro
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Não tem uma conta?',
+                          style: TextStyle(
+                            color: Color(AppColors.cinza),
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          ' Cadastrar',
+                          style: TextStyle(
+                            color: Color(AppColors.cinza),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
 
                   // Divisor
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Divider(color: Colors.grey[300])),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          'ou',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
-                          ),
-                        ),
+                      Container(
+                        width: width * .4,
+                        height: 2,
+                        color: Color(AppColors.azulescuro),
                       ),
-                      Expanded(child: Divider(color: Colors.grey[300])),
+                      const Text('ou', style: TextStyle(fontSize: 20)),
+                      Container(
+                        width: width * .4,
+                        height: 2,
+                        color: Color(AppColors.azulescuro),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 24),
 
-                  // Botão Cadastro
+                  const SizedBox(height: 20),
+
+                  // Login com outras plataformas
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Não tem uma conta? ',
-                        style: TextStyle(color: Colors.grey[600], fontSize: 15),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/register");
-                        },
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: Text(
-                          'Cadastre-se',
-                          style: TextStyle(
-                            color: Colors.blue[600],
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      Image.asset('assets/imgs/Google.png'),
+                      const SizedBox(width: 15),
+                      Image.asset('assets/imgs/Microsoft.png'),
                     ],
                   ),
                 ],

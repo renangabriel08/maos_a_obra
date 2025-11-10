@@ -179,15 +179,16 @@ INSERT INTO userTypes (description) VALUES
 -- Statuses (lowercase)
 INSERT INTO statuses (description) VALUES
 ("solicitado"),
-("aceito"),
+("cancelado"),
 ("recusado"),
 ("visita_agendada"),
-("nova_data_sugerida"),
+("nova_data_sugerida_cliente"),
+("nova_data_sugerida_prestador"),
 ("visita_confirmada"),
 ("visita_realizada"),
-("concluido"),
-("avaliado"),
-("visita_pendente_confirmacao");
+("servico_realizado"),
+("servico_finalizado"),
+("servico_avaliado"),
 
 -- Notification types
 INSERT INTO notificationTypes (name) VALUES

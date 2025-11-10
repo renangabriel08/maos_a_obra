@@ -17,12 +17,20 @@ class BudgetService {
     List<File> imagens,
   ) async {
     try {
+      if (budgetData['data'] == null) {
+        budgetData['status_id'] = 4;
+      }
+
       var uri = Uri.parse('$baseUrl/orcamentos');
       var request = http.MultipartRequest('POST', uri);
 
       request.headers['Authorization'] = 'Bearer ${DataController.user!.token}';
       budgetData.forEach((key, value) {
-        request.fields[key] = value.toString();
+        if (key != "data") {
+          request.fields[key] = value.toString();
+        } else if (budgetData['data'] != null) {
+          request.fields[key] = value.toString();
+        }
       });
 
       for (var img in imagens) {
@@ -105,14 +113,14 @@ class BudgetService {
 
   Future<bool> updateBudgetDate(int budgetId, String newDate) async {
     try {
-      final uri = Uri.parse('$baseUrl/budgets/$budgetId/date');
-      final response = await http.put(
+      final uri = Uri.parse('$baseUrl/orcamentos/$budgetId/visita');
+      final response = await http.patch(
         uri,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${DataController.user!.token}',
         },
-        body: jsonEncode({'date': newDate}),
+        body: jsonEncode({'data': newDate, "visita": true}),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -134,5 +142,36 @@ class BudgetService {
       toast.getToast("Erro de conexão com API");
     }
     return false;
+  }
+
+  Future<bool> updateBudgetValue(
+    int budgetId,
+    double valor,
+    String justificativa,
+  ) async {
+    try {
+      var response = await http.patch(
+        Uri.parse('$baseUrl/orcamentos/$budgetId/valor'),
+        headers: {
+          'Authorization': 'Bearer ${DataController.user!.token}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'valor': valor, 'justificativa': justificativa}),
+      );
+
+      if (response.statusCode == 200) {
+        var jsonResp = jsonDecode(response.body);
+        toast.getToast(jsonResp['message']);
+        return true;
+      } else {
+        var jsonResp = jsonDecode(response.body);
+        toast.getToast(jsonResp['error'] ?? 'Erro ao atualizar orçamento');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('Erro ao atualizar orçamento: $e');
+      toast.getToast('Erro de conexão com API');
+      return false;
+    }
   }
 }

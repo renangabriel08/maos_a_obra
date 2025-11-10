@@ -9,6 +9,7 @@ import 'package:maos_a_obra/models/budget_model.dart';
 
 class BudgetController {
   BudgetService budgetService;
+  int? lastCreatedBudgetId;
   MyToast myToast = MyToast();
   NotificationService notificationService = NotificationService(
     baseUrl: baseUrl,
@@ -28,6 +29,7 @@ class BudgetController {
       Budget? budget = await budgetService.createBudget(budgetData, images);
 
       if (budget != null) {
+        lastCreatedBudgetId = budget.id;
         notificationData["orcamento_id"] = budget.id;
 
         await notificationService.addNotification(notificationData);
@@ -95,6 +97,25 @@ class BudgetController {
     } catch (e) {
       debugPrint("Erro ao atualizar data: $e");
       myToast.getToast("Erro inesperado");
+    }
+  }
+
+  Future<void> updateBudgetValue(
+    int budgetId,
+    double valor,
+    String justificativa,
+    BuildContext context,
+  ) async {
+    bool success = await budgetService.updateBudgetValue(
+      budgetId,
+      valor,
+      justificativa,
+    );
+
+    if (success) {
+      myToast.getToast("Orçamento atualizado com sucesso");
+    } else {
+      myToast.getToast("Erro ao atualizar orçamento");
     }
   }
 }

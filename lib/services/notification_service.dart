@@ -44,13 +44,7 @@ class NotificationService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final String responseString = utf8.decode(response.bodyBytes);
-
-        String fixedResponseString = responseString;
-        if (responseString.isNotEmpty && responseString.trim().endsWith('}')) {
-          fixedResponseString = '$responseString]';
-        }
-
-        final List<dynamic> responseBody = jsonDecode(fixedResponseString);
+        final List<dynamic> responseBody = jsonDecode(responseString);
 
         return responseBody.map((e) => NotificationModel.fromJson(e)).toList();
       } else {

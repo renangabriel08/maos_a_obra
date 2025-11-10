@@ -20,8 +20,8 @@ void main() {
   runApp(const MyApp());
 }
 
-final String baseUrl = "http://10.91.226.81:3000/api";
-final String imgUrl = "http://10.91.226.81:3000/storage";
+final String baseUrl = "http://10.91.226.98:8000/api";
+final String imgUrl = "http://10.91.226.98:8000/storage";
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:maos_a_obra/controllers/address_controller.dart';
+import 'package:maos_a_obra/styles/style.dart';
 
 class RegisterAddressScreen extends StatefulWidget {
   const RegisterAddressScreen({super.key});
@@ -99,72 +100,169 @@ class _RegisterAddressScreenState extends State<RegisterAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Cadastro de Endereço')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: cepController,
-                decoration: InputDecoration(
-                  labelText: 'CEP',
-                  suffixIcon: loadingCep
-                      ? const Padding(
-                          padding: EdgeInsets.all(10),
-                          child: SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Image.asset('assets/imgs/Logo.png'),
+                      const SizedBox(height: 20),
+                      Text(
+                        'Insira seu endereço',
+                        style: TextStyle(
+                          color: Color(AppColors.cinza),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                  TextFormField(
+                    controller: cepController,
+                    decoration: AppDecorations.inputDecoration('CEP*').copyWith(
+                      suffixIcon: loadingCep
+                          ? const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (v) => validateField(v, 'CEP', maxLength: 8),
+                    onChanged: (value) {
+                      if (value.length == 8) buscarCep(value);
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: estadoController,
+                          decoration: AppDecorations.inputDecoration('Estado*'),
+                          validator: (v) =>
+                              validateField(v, 'Estado', maxLength: 2),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: cidadeController,
+                          decoration: AppDecorations.inputDecoration('Cidade*'),
+                          validator: (v) =>
+                              validateField(v, 'Cidade', maxLength: 100),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: bairroController,
+                    decoration: AppDecorations.inputDecoration('Bairro*'),
+                    validator: (v) =>
+                        validateField(v, 'Bairro', maxLength: 100),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: ruaController,
+                          decoration: AppDecorations.inputDecoration('Rua*'),
+                          validator: (v) =>
+                              validateField(v, 'Rua', maxLength: 150),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: numeroController,
+                          decoration: AppDecorations.inputDecoration('Número*'),
+                          validator: (v) =>
+                              validateField(v, 'Número', maxLength: 10),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: complementoController,
+                    decoration: AppDecorations.inputDecoration('Complemento'),
+                    validator: (v) =>
+                        validateField(v, 'Complemento', maxLength: 100),
+                  ),
+                  const SizedBox(height: 80),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: Size(width, 50),
+                            backgroundColor: Colors.white,
+                            side: BorderSide(
+                              color: Color(AppColors.azulescuro),
+                              width: 2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                        )
-                      : null,
-                ),
-                keyboardType: TextInputType.number,
-                validator: (v) => validateField(v, 'CEP', maxLength: 8),
-                onFieldSubmitted: (value) => buscarCep(value),
-                onChanged: (value) {
-                  if (value.length == 8) {
-                    buscarCep(value);
-                  }
-                },
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(context, '/home');
+                          },
+                          child: Text(
+                            'Voltar',
+                            style: TextStyle(
+                              color: Color(AppColors.azulescuro),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 50),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: Size(width, 50),
+                            backgroundColor: Color(AppColors.roxo),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: salvar,
+                          child: const Text(
+                            'Prosseguir',
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              TextFormField(
-                controller: estadoController,
-                decoration: const InputDecoration(labelText: 'Estado (UF)'),
-                validator: (v) => validateField(v, 'Estado', maxLength: 2),
-              ),
-              TextFormField(
-                controller: cidadeController,
-                decoration: const InputDecoration(labelText: 'Cidade'),
-                validator: (v) => validateField(v, 'Cidade', maxLength: 100),
-              ),
-              TextFormField(
-                controller: bairroController,
-                decoration: const InputDecoration(labelText: 'Bairro'),
-                validator: (v) => validateField(v, 'Bairro', maxLength: 100),
-              ),
-              TextFormField(
-                controller: ruaController,
-                decoration: const InputDecoration(labelText: 'Rua'),
-                validator: (v) => validateField(v, 'Rua', maxLength: 150),
-              ),
-              TextFormField(
-                controller: numeroController,
-                decoration: const InputDecoration(labelText: 'Número'),
-                validator: (v) => validateField(v, 'Número', maxLength: 10),
-              ),
-              TextFormField(
-                controller: complementoController,
-                decoration: const InputDecoration(labelText: 'Complemento'),
-                validator: (v) =>
-                    validateField(v, 'Complemento', maxLength: 100),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(onPressed: salvar, child: const Text('Salvar')),
-            ],
+            ),
           ),
         ),
       ),

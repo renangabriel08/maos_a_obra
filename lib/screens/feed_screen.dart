@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:maos_a_obra/controllers/data_controller.dart';
 import 'package:maos_a_obra/controllers/post_controller.dart';
 import 'package:maos_a_obra/main.dart';
-import 'package:maos_a_obra/screens/search_delegate_screen.dart';
+import 'package:maos_a_obra/styles/style.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -18,7 +18,7 @@ class _FeedScreenState extends State<FeedScreen> {
   PostController postController = PostController();
   bool loading = true;
 
-  void openSearchModal() {
+  void openSearcaaaaahModal() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -139,198 +139,143 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   Widget build(BuildContext context) {
     final posts = DataController.feed;
+    double width = MediaQuery.of(context).size.width;
 
     return loading
         ? Center(child: CircularProgressIndicator())
-        : Column(
-            children: [
-              InkWell(
-                onTap: () => showSearch(
-                  context: context,
-                  delegate: SearchDelegateScreen(),
-                ),
-                child: Container(
-                  margin: const EdgeInsets.all(12),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
+        : posts.isEmpty
+        ? const Center(child: Text("Nenhum post disponível"))
+        : RefreshIndicator(
+            onRefresh: () async {
+              await postController.getPosts(context);
+              setState(() {});
+            },
+            child: ListView.builder(
+              padding: const EdgeInsets.all(0),
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(0),
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.search, color: Colors.grey),
-                      SizedBox(width: 8),
-                      Text(
-                        "Buscar prestadores...",
-                        style: TextStyle(color: Colors.grey),
+                  color: Colors.white,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  elevation: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            '$imgUrl/${post.user.imagePath}',
+                          ),
+                        ),
+                        title: GestureDetector(
+                          onTap: () {
+                            DataController.selectedUser = post.user;
+                            Navigator.pushNamed(
+                              context,
+                              '/selectedUserProfile',
+                            );
+                          },
+                          child: Text(
+                            post.user.name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        subtitle: Text(
+                          post.user.experiencia ?? "Sem descrição",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(Icons.star, color: Colors.amber, size: 18),
+                            SizedBox(width: 4),
+                            Text("4,5"),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        child: Text(post.descricao.toString()),
+                      ),
+                      Container(height: 8),
+                      if (post.images.isEmpty)
+                        Container(
+                          height: 220,
+                          width: width,
+                          color: Colors.grey.shade300,
+                          child: const Icon(
+                            Icons.image,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                        )
+                      else
+                        Image.network(
+                          '$imgUrl/${post.images.first.path}',
+                          height: 220,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            height: 220,
+                            width: width,
+                            color: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          children: const [
+                            Text("Você e mais 32 pessoas"),
+                            Spacer(),
+                            Text("2 comentários"),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 1),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Color(AppColors.roxo),
+                            ),
+                            onPressed: () {},
+                            icon: const Icon(Icons.thumb_up_alt_outlined),
+                            label: const Text("Gostei"),
+                          ),
+                          TextButton.icon(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Color(AppColors.azulescuro),
+                            ),
+                            onPressed: () {},
+                            icon: const Icon(Icons.comment_outlined),
+                            label: const Text("Comentar"),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-              ),
-              Expanded(
-                child: posts.isEmpty
-                    ? const Center(child: Text("Nenhum post disponível"))
-                    : RefreshIndicator(
-                        onRefresh: () async {
-                          await postController.getPosts(context);
-                          setState(() {});
-                        },
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(12),
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            final post = posts[index];
-
-                            return Card(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ListTile(
-                                      onTap: () {
-                                        DataController.selectedUser = post.user;
-                                        Navigator.pushNamed(
-                                          context,
-                                          '/selectedUserProfile',
-                                        );
-                                      },
-                                      leading: Container(
-                                        width: 40,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            999,
-                                          ),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                            999,
-                                          ),
-                                          child: Image.network(
-                                            '$imgUrl/${post.user.imagePath}',
-                                            height: 40,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                                  return Center(
-                                                    child: Icon(
-                                                      Icons.person,
-                                                      size: 40,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  );
-                                                },
-                                          ),
-                                        ),
-                                      ),
-                                      title: Text(
-                                        post.user.name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        post.user.email,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      trailing: Text(
-                                        timeAgo(post.data),
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    if (post.images.isNotEmpty)
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.network(
-                                          '$imgUrl/${post.images.first.path}',
-                                          height: 250,
-                                          width: double.infinity,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                                return Container(
-                                                  height: 250,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey.shade300,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          12,
-                                                        ),
-                                                  ),
-                                                  child: const Center(
-                                                    child: Icon(
-                                                      Icons.image,
-                                                      size: 50,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                        ),
-                                      )
-                                    else
-                                      Container(
-                                        height: 150,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey.shade300,
-                                          borderRadius: BorderRadius.circular(
-                                            12,
-                                          ),
-                                        ),
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.image,
-                                            size: 50,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    const SizedBox(height: 12),
-                                    Text(post.descricao.toString()),
-                                    const SizedBox(height: 12),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.favorite_border,
-                                          ),
-                                          onPressed: () {},
-                                        ),
-                                        Text("${post.curtidas}"),
-                                        const SizedBox(width: 16),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.comment_outlined,
-                                          ),
-                                          onPressed: () {},
-                                        ),
-                                        Text("${post.comments.length}"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-              ),
-            ],
+                );
+              },
+            ),
           );
   }
 }

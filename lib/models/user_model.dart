@@ -20,6 +20,8 @@ class User {
   List<Budget> budgets;
   List<Post> posts;
   bool isActive;
+  int nota;
+  int orcamentos;
 
   User({
     required this.id,
@@ -38,6 +40,8 @@ class User {
     this.budgets = const [],
     this.posts = const [],
     required this.isActive,
+    this.nota = 0,
+    this.orcamentos = 0,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -76,6 +80,8 @@ class User {
               .toList() ??
           [],
       isActive: json['isActive'] == 1,
+      nota: json['nota'] ?? 0,
+      orcamentos: json['orcamentos'] ?? 0,
     );
   }
 
@@ -97,6 +103,8 @@ class User {
       'budgets': budgets.map((e) => e.toJson()).toList(),
       'posts': posts.map((e) => e.toJson()).toList(),
       'isActive': isActive,
+      'nota': nota,
+      'orcamentos': orcamentos,
     };
   }
 }

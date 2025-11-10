@@ -9,6 +9,8 @@ class Budget {
   final bool? visita;
   final DateTime? data;
   final String? observacoes;
+  final double? valor;
+  final String? justificativa;
   final User cliente;
   final User prestador;
   final Address address;
@@ -21,6 +23,8 @@ class Budget {
     this.visita,
     this.data,
     this.observacoes,
+    this.valor,
+    this.justificativa,
     required this.cliente,
     required this.prestador,
     required this.address,
@@ -35,6 +39,10 @@ class Budget {
       visita: json['visita'].toString() == "1",
       data: json['data'] != null ? DateTime.parse(json['data']) : null,
       observacoes: json['observacoes'],
+      valor: json['valor'] != null
+          ? double.parse(json['valor'].toString())
+          : null,
+      justificativa: json['justificativa'],
       cliente: User.fromJson(json['cliente']),
       prestador: User.fromJson(json['prestador']),
       address: Address.fromJson(json['endereco']),
@@ -54,6 +62,8 @@ class Budget {
       'visita': visita,
       'data': data?.toIso8601String(),
       'observacoes': observacoes,
+      'valor': valor,
+      'justificativa': justificativa,
       'cliente': cliente.toJson(),
       'prestador': prestador.toJson(),
       'endereco': address.toJson(),

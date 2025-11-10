@@ -92,49 +92,67 @@ class NotificationController {
     String descricao = "";
 
     switch (notificationId) {
-      case 1:
+      case 1: // solicitado
         titulo = "Nova solicitação de orçamento.";
         descricao =
             "${DataController.user!.name} solicitou um novo orçamento. Clique para ver detalhes.";
         break;
 
-      case 2:
-        titulo = "Nova data sugerida.";
-        descricao =
-            "${DataController.user!.name} sugeriu uma nova data para o orçamento.";
-        break;
-
-      case 3:
-        titulo = "Nova data sugerida.";
-        descricao =
-            "${DataController.user!.name} sugeriu uma nova data para o orçamento.";
-        break;
-
-      case 4:
-        titulo = "Orçamento aceito.";
-        descricao =
-            "${DataController.user!.name} aceitou o orçamento. Clique para ver detalhes.";
-        break;
-
-      case 5: // recusado
-        titulo = "Orçamento recusado.";
-        descricao =
-            "${DataController.user!.name} recusou o orçamento. Clique para ver detalhes.";
-        break;
-
-      case 6:
+      case 2: // cancelado
         titulo = "Orçamento cancelado.";
         descricao =
             "${DataController.user!.name} cancelou o orçamento. Clique para ver detalhes.";
         break;
 
-      case 7:
+      case 3: // recusado
+        titulo = "Orçamento recusado.";
+        descricao =
+            "${DataController.user!.name} recusou o orçamento. Clique para ver detalhes.";
+        break;
+
+      case 4: // visita_agendada
+        titulo = "Visita agendada.";
+        descricao =
+            "${DataController.user!.name} agendou uma visita. Clique para ver detalhes.";
+        break;
+
+      case 5: // nova_data_sugerida_cliente
+        titulo = "Nova data sugerida.";
+        descricao =
+            "${DataController.user!.name} sugeriu uma nova data para o orçamento.";
+        break;
+
+      case 6: // nova_data_sugerida_prestador
+        titulo = "Nova data sugerida.";
+        descricao =
+            "${DataController.user!.name} sugeriu uma nova data para o orçamento.";
+        break;
+
+      case 7: // visita_realizada
+        titulo = "Visita realizada.";
+        descricao =
+            "${DataController.user!.name} marcou a visita como realizada.";
+        break;
+
+      case 8: // orçamento_aceito
+        titulo = "Orçamento aceito.";
+        descricao =
+            "${DataController.user!.name} aceitou o orçamento. Clique para ver detalhes.";
+        break;
+
+      case 9: // servico_realizado
+        titulo = "Serviço realizado.";
+        descricao =
+            "${DataController.user!.name} marcou o serviço como realizado.";
+        break;
+
+      case 10: // servico_finalizado
         titulo = "Serviço concluído.";
         descricao =
             "${DataController.user!.name} marcou o orçamento como concluído.";
         break;
 
-      case 8:
+      case 11: // servico_avaliado
         titulo = "Serviço avaliado.";
         descricao =
             "${DataController.user!.name} avaliou o serviço prestado. Clique para ver detalhes.";
