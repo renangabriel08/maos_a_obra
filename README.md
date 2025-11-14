@@ -90,10 +90,6 @@ O Flutter irá compilar o projeto e instalá-lo no dispositivo ou emulador selec
 
 Como este é um MVP, alguns recursos podem estar incompletos ou apresentar bugs. Se encontrar algum problema, sinta-se à vontade para abrir uma issue no repositório.
 
-## 📄 Licença
-
-[Adicione aqui a licença do seu projeto]
-
 ## 👥 Contribuindo
 
 Contribuições são sempre bem-vindas! Sinta-se à vontade para abrir pull requests ou reportar issues.
