@@ -20,7 +20,8 @@ class RegisterController {
       DataController.user = await authService.register(userData);
 
       if (DataController.user != null) {
-        Navigator.pushNamed(context, '/address');
+        DataController.podeVoltar = false;
+        Navigator.pushReplacementNamed(context, '/address');
         myToast.getToast("Cadastro realizado com sucesso");
       } else {
         myToast.getToast("Erro ao realizar cadastro");

@@ -74,7 +74,6 @@ class NotificationController {
         DataController.notifications = notifications;
       } else {
         DataController.notifications = [];
-        myToast.getToast("Nenhuma notificação encontrada");
       }
     } catch (e) {
       debugPrint("Erro ao buscar notificações: $e");
@@ -176,9 +175,7 @@ class NotificationController {
         notificationData,
       );
 
-      if (success) {
-        myToast.getToast("Notificação enviada com sucesso");
-      } else {
+      if (!success) {
         myToast.getToast("Falha ao enviar notificação");
       }
     } catch (e) {

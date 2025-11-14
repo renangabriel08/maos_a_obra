@@ -48,8 +48,6 @@ class BudgetController {
       List<Budget> budgets = await budgetService.fetchBudgets() ?? [];
       if (budgets.isNotEmpty) {
         DataController.orcamentos = budgets;
-      } else {
-        myToast.getToast("Nenhum orçamento encontrado");
       }
     } catch (e) {
       debugPrint("Erro ao buscar orçamentos: $e");
@@ -66,7 +64,6 @@ class BudgetController {
       bool success = await budgetService.updateBudgetStatus(budgetId, status);
 
       if (success) {
-        myToast.getToast("Status atualizado com sucesso");
         await getBudgets(context);
       } else {
         myToast.getToast("Erro ao atualizar status");
@@ -89,7 +86,6 @@ class BudgetController {
       );
 
       if (success) {
-        myToast.getToast("Data atualizada com sucesso");
         await getBudgets(context);
       } else {
         myToast.getToast("Erro ao atualizar data");
@@ -112,9 +108,7 @@ class BudgetController {
       justificativa,
     );
 
-    if (success) {
-      myToast.getToast("Orçamento atualizado com sucesso");
-    } else {
+    if (!success) {
       myToast.getToast("Erro ao atualizar orçamento");
     }
   }

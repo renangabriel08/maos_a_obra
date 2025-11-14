@@ -38,7 +38,6 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
       context,
     );
 
-    myToast.getToast("Avaliação enviada com sucesso!");
     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
   }
 

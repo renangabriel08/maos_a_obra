@@ -25,7 +25,6 @@ class SearchController {
         DataController.resultadosBusca = prestadores;
       } else {
         DataController.resultadosBusca = [];
-        myToast.getToast("Nenhum prestador encontrado");
       }
     } catch (e) {
       debugPrint("Erro ao buscar prestadores: $e");

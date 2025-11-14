@@ -40,8 +40,6 @@ class PostController {
 
       if (posts.isNotEmpty) {
         DataController.feed = posts;
-      } else {
-        myToast.getToast("Nenhum post encontrado");
       }
     } catch (e) {
       debugPrint("Erro ao buscar posts: $e");

@@ -44,7 +44,6 @@ class BudgetService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         var respStr = await response.stream.bytesToString();
         var jsonResp = jsonDecode(respStr);
-        toast.getToast(jsonResp['message']);
         return Budget.fromJson(jsonResp['orcamento']);
       } else {
         var respStr = await response.stream.bytesToString();
@@ -124,12 +123,6 @@ class BudgetService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        final Map<String, dynamic> responseBody = jsonDecode(
-          utf8.decode(response.bodyBytes),
-        );
-        toast.getToast(
-          responseBody['message'] ?? 'Data atualizada com sucesso',
-        );
         return true;
       } else {
         final Map<String, dynamic> responseBody = jsonDecode(
@@ -160,8 +153,6 @@ class BudgetService {
       );
 
       if (response.statusCode == 200) {
-        var jsonResp = jsonDecode(response.body);
-        toast.getToast(jsonResp['message']);
         return true;
       } else {
         var jsonResp = jsonDecode(response.body);

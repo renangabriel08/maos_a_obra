@@ -4,8 +4,6 @@ import 'package:maos_a_obra/controllers/data_controller.dart';
 import 'package:maos_a_obra/controllers/budget_controller.dart';
 import 'package:maos_a_obra/main.dart';
 import 'package:maos_a_obra/models/budget_model.dart';
-import 'package:maos_a_obra/screens/budget_details_screen.dart';
-import 'package:maos_a_obra/styles/animacoes.dart';
 import 'package:maos_a_obra/styles/style.dart';
 
 class BudgetScreen extends StatefulWidget {
@@ -179,11 +177,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     return GestureDetector(
       onTap: () {
         DataController.selectedBudget = budget;
-        NavigationHelper.navigateTo(
-          context,
-          const BudgetDetailsScreen(),
-          type: TransitionType.fadeSlide,
-        );
+        Navigator.pushNamed(context, "/budgetDetails");
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 5),

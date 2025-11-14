@@ -21,7 +21,7 @@ class SpecialtiesController {
           await authService.registerSpecialties(specialties) ?? [];
 
       if (DataController.user!.specialties.isNotEmpty) {
-        Navigator.pushNamed(context, '/login');
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         myToast.getToast("Cadastro finalizado com sucesso");
       } else {
         myToast.getToast("Erro ao finalizar cadastro");

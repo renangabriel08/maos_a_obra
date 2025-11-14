@@ -5,9 +5,7 @@ import 'package:maos_a_obra/controllers/data_controller.dart';
 import 'package:maos_a_obra/controllers/register_controller.dart';
 import 'package:maos_a_obra/main.dart';
 import 'package:maos_a_obra/models/user_type_model.dart';
-import 'package:maos_a_obra/screens/register_address_screen.dart';
 import 'package:maos_a_obra/services/data_service.dart';
-import 'package:maos_a_obra/styles/animacoes.dart';
 import 'package:maos_a_obra/styles/style.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -297,17 +295,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     };
 
     await registerController.register(user, context, formKey);
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-
-      // Após registrar, mantém a navegação pra Inserirendereco (conforme confirmado)
-      NavigationHelper.replaceTo(
-        context,
-        RegisterAddressScreen(),
-        type: TransitionType.fadeSlide,
-      );
-    }
   }
 
   String capitalize(String text) {

@@ -43,11 +43,11 @@ class AuthService {
         body: jsonEncode(user),
       );
 
-      final Map<String, dynamic> responseBody = jsonDecode(
-        utf8.decode(response.bodyBytes),
-      );
-
       if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseBody = jsonDecode(
+          utf8.decode(response.bodyBytes),
+        );
+
         return User.fromJson(
           responseBody['user']..['token'] = responseBody['token'],
         );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:maos_a_obra/controllers/address_controller.dart';
+import 'package:maos_a_obra/controllers/data_controller.dart';
 import 'package:maos_a_obra/styles/style.dart';
 
 class RegisterAddressScreen extends StatefulWidget {
@@ -209,39 +210,38 @@ class _RegisterAddressScreenState extends State<RegisterAddressScreen> {
                   TextFormField(
                     controller: complementoController,
                     decoration: AppDecorations.inputDecoration('Complemento'),
-                    validator: (v) =>
-                        validateField(v, 'Complemento', maxLength: 100),
                   ),
                   const SizedBox(height: 80),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(width, 50),
-                            backgroundColor: Colors.white,
-                            side: BorderSide(
-                              color: Color(AppColors.azulescuro),
-                              width: 2,
+                      if (DataController.podeVoltar)
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              fixedSize: Size(width, 50),
+                              backgroundColor: Colors.white,
+                              side: BorderSide(
+                                color: Color(AppColors.azulescuro),
+                                width: 2,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(context, '/home');
-                          },
-                          child: Text(
-                            'Voltar',
-                            style: TextStyle(
-                              color: Color(AppColors.azulescuro),
-                              fontSize: 16,
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(context, '/home');
+                            },
+                            child: Text(
+                              'Voltar',
+                              style: TextStyle(
+                                color: Color(AppColors.azulescuro),
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 50),
+                      if (DataController.podeVoltar) const SizedBox(width: 50),
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(

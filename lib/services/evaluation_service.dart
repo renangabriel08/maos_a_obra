@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:maos_a_obra/controllers/data_controller.dart';
+import 'package:maos_a_obra/main.dart';
 import 'package:maos_a_obra/models/evaluation_model.dart';
 import 'package:maos_a_obra/widgets/toast.dart';
 
 class EvaluationService {
-  final String baseUrl = 'http://10.91.226.85:8000/api';
   final MyToast toast = MyToast();
 
   Future<bool> submitEvaluation(
@@ -30,8 +30,6 @@ class EvaluationService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        var jsonResp = jsonDecode(response.body);
-        toast.getToast(jsonResp['message']);
         return true;
       } else {
         var jsonResp = jsonDecode(response.body);

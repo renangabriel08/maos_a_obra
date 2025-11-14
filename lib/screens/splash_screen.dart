@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maos_a_obra/screens/login_screen.dart';
-import 'package:maos_a_obra/styles/animacoes.dart';
 import 'package:maos_a_obra/styles/style.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -54,10 +53,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               onPressed: () {
-                NavigationHelper.replaceTo(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  LoginScreen(),
-                  type: TransitionType.fadeSlide,
+                  '/login',
+                  (route) => false,
                 );
               },
               child: Text(

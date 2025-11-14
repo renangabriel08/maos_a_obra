@@ -42,6 +42,7 @@ class _UserAddressListScreenState extends State<UserAddressListScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+          DataController.podeVoltar = true;
           AppRoutes.ultimaRota = '/addresses';
           await Navigator.push(
             context,

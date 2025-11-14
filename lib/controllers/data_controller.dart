@@ -20,6 +20,7 @@ class DataController {
   static List<UserType> tiposUsuario = [];
   static List<Status> status = [];
   static List<User> resultadosBusca = [];
+  static bool podeVoltar = false;
 
   static ValueNotifier pagina = ValueNotifier(0);
 }

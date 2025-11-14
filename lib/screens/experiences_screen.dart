@@ -154,35 +154,35 @@ class _ExperiencesScreenState extends State<ExperiencesScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(width, 50),
-                            backgroundColor: Colors.white,
-                            side: BorderSide(
-                              color: Color(AppColors.azulescuro),
-                              width: 2,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              '/Cadastro',
-                            );
-                          },
-                          child: Text(
-                            'Voltar',
-                            style: TextStyle(
-                              color: Color(AppColors.azulescuro),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 50),
+                      // Expanded(
+                      //   child: ElevatedButton(
+                      //     style: ElevatedButton.styleFrom(
+                      //       fixedSize: Size(width, 50),
+                      //       backgroundColor: Colors.white,
+                      //       side: BorderSide(
+                      //         color: Color(AppColors.azulescuro),
+                      //         width: 2,
+                      //       ),
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //     ),
+                      //     onPressed: () {
+                      //       Navigator.pushReplacementNamed(
+                      //         context,
+                      //         '/Cadastro',
+                      //       );
+                      //     },
+                      //     child: Text(
+                      //       'Voltar',
+                      //       style: TextStyle(
+                      //         color: Color(AppColors.azulescuro),
+                      //         fontSize: 16,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(width: 50),
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(

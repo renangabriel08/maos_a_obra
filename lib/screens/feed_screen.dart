@@ -191,10 +191,10 @@ class _FeedScreenState extends State<FeedScreen> {
                         ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
+                          children: [
                             Icon(Icons.star, color: Colors.amber, size: 18),
                             SizedBox(width: 4),
-                            Text("4,5"),
+                            Text(post.user.nota.toStringAsFixed(1)),
                           ],
                         ),
                       ),

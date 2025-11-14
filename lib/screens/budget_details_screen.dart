@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:maos_a_obra/controllers/data_controller.dart';
@@ -7,6 +8,7 @@ import 'package:maos_a_obra/controllers/budget_controller.dart';
 import 'package:maos_a_obra/controllers/notifications_controller.dart';
 import 'package:maos_a_obra/main.dart';
 import 'package:maos_a_obra/models/budget_model.dart';
+import 'package:maos_a_obra/widgets/toast.dart';
 
 class BudgetDetailsScreen extends StatefulWidget {
   const BudgetDetailsScreen({super.key});
@@ -22,6 +24,7 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   final TextEditingController orcamentoController = TextEditingController();
+  MyToast myToast = MyToast();
 
   // Mapeamento dos IDs de status
   static const int STATUS_SOLICITADO = 1;
@@ -90,10 +93,12 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
                     ),
                     child: CircleAvatar(
                       radius: 32,
-                      backgroundImage: NetworkImage(
-                        budget.cliente.imagePath ??
-                            "https://i.pravatar.cc/150?img=1",
-                      ),
+                      backgroundImage: budget.cliente.imagePath != null
+                          ? NetworkImage(budget.cliente.imagePath!)
+                          : null,
+                      child: budget.cliente.imagePath == null
+                          ? Icon(Icons.person)
+                          : null,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -769,7 +774,9 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.cliente.id,
         STATUS_VISITA_AGENDADA,
       );
-      _refreshAndPop(context);
+
+      myToast.getToast("Orçamento aceito com sucesso!");
+      _refreshAndPop(context, 2);
     }
   }
 
@@ -792,8 +799,8 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.prestador.id,
         STATUS_CANCELADO,
       );
-
-      _refreshAndPop(context);
+      myToast.getToast("Orçamento cancelado com sucesso!");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -816,7 +823,9 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.cliente.id,
         STATUS_RECUSADO,
       );
-      _refreshAndPop(context);
+
+      myToast.getToast("Orçamento recusado!");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -839,7 +848,8 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.cliente.id,
         STATUS_VISITA_AGENDADA,
       );
-      _refreshAndPop(context);
+      myToast.getToast("Orçamento aceito! Visita agendada.");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -864,7 +874,8 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         isCliente ? budget.prestador.id : budget.cliente.id,
         STATUS_VISITA_AGENDADA,
       );
-      _refreshAndPop(context);
+      myToast.getToast("Nova data aceita! Visita agendada.");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -887,7 +898,8 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.cliente.id,
         STATUS_SERVICO_REALIZADO,
       );
-      _refreshAndPop(context);
+      myToast.getToast("Serviço marcado como realizado!");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -910,7 +922,7 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.prestador.id,
         STATUS_SERVICO_FINALIZADO,
       );
-
+      myToast.getToast("Serviço finalizado com sucesso!");
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, '/assessment');
     }
@@ -935,7 +947,9 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.prestador.id,
         STATUS_ORCAMENTO_ACEITO,
       );
-      _refreshAndPop(context);
+
+      myToast.getToast("Proposta de orçamento aceita!");
+      _refreshAndPop(context, 2);
     }
   }
 
@@ -958,7 +972,8 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         budget.prestador.id,
         STATUS_CANCELADO,
       );
-      _refreshAndPop(context);
+      myToast.getToast("Proposta de orçamento recusada!");
+      _refreshAndPop(context, 1);
     }
   }
 
@@ -1167,7 +1182,6 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
               onPressed: () {
                 if (valorController.text.isNotEmpty &&
                     descricaoController.text.isNotEmpty) {
-                  Navigator.of(context).pop();
                   _confirmVisitAndSendBudget(
                     context,
                     budget,
@@ -1224,7 +1238,46 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
       context,
     );
 
-    _refreshAndPop(context);
+    myToast.getToast("Orçamento enviado com sucesso!");
+    _refreshAndPop(context, 2);
+  }
+
+  void _confirmNewDate(BuildContext context, Budget budget) async {
+    if (selectedDate != null && selectedTime != null) {
+      final DateTime combinedDateTime = DateTime(
+        selectedDate!.year,
+        selectedDate!.month,
+        selectedDate!.day,
+        selectedTime!.hour,
+        selectedTime!.minute,
+      );
+
+      final String formattedDate = DateFormat(
+        "yyyy-MM-dd HH:mm:ss",
+      ).format(combinedDateTime);
+
+      final bool isCliente = DataController.user!.role == 'cliente';
+      final int newStatus = isCliente
+          ? STATUS_NOVA_DATA_SUGERIDA_CLIENTE
+          : STATUS_NOVA_DATA_SUGERIDA_PRESTADOR;
+
+      await budgetController.updateBudgetDate(
+        budget.id,
+        formattedDate,
+        context,
+      );
+
+      await budgetController.updateBudgetStatus(budget.id, newStatus, context);
+      await notificationController.addNotification(
+        budget.id,
+        isCliente ? budget.cliente.id : budget.prestador.id,
+        isCliente ? budget.prestador.id : budget.cliente.id,
+        newStatus,
+      );
+
+      myToast.getToast("Nova data sugerida com sucesso!");
+      _refreshAndPop(context, 2);
+    }
   }
 
   void _showBudgetDetailsModal(BuildContext context, Budget budget) {
@@ -1381,7 +1434,6 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
             ),
             ElevatedButton.icon(
               onPressed: () {
-                Navigator.of(context).pop();
                 _acceptBudgetProposal(context, budget);
               },
               icon: const Icon(Icons.check, size: 18),
@@ -1404,45 +1456,6 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
         );
       },
     );
-  }
-
-  void _confirmNewDate(BuildContext context, Budget budget) async {
-    if (selectedDate != null && selectedTime != null) {
-      final DateTime combinedDateTime = DateTime(
-        selectedDate!.year,
-        selectedDate!.month,
-        selectedDate!.day,
-        selectedTime!.hour,
-        selectedTime!.minute,
-      );
-
-      final String formattedDate = DateFormat(
-        "yyyy-MM-dd HH:mm:ss",
-      ).format(combinedDateTime);
-
-      Navigator.of(context).pop();
-
-      final bool isCliente = DataController.user!.role == 'cliente';
-      final int newStatus = isCliente
-          ? STATUS_NOVA_DATA_SUGERIDA_CLIENTE
-          : STATUS_NOVA_DATA_SUGERIDA_PRESTADOR;
-
-      await budgetController.updateBudgetDate(
-        budget.id,
-        formattedDate,
-        context,
-      );
-
-      await budgetController.updateBudgetStatus(budget.id, newStatus, context);
-      await notificationController.addNotification(
-        budget.id,
-        isCliente ? budget.cliente.id : budget.prestador.id,
-        isCliente ? budget.prestador.id : budget.cliente.id,
-        newStatus,
-      );
-
-      _refreshAndPop(context);
-    }
   }
 
   Future<bool?> _showConfirmDialog(
@@ -1487,14 +1500,15 @@ class _BudgetDetailsScreenState extends State<BudgetDetailsScreen> {
     );
   }
 
-  void _refreshAndPop(BuildContext context) {
+  void _refreshAndPop(BuildContext context, int index) {
     try {
-      Navigator.pop(context);
+      for (int i = 0; i < index; i++) {
+        Navigator.pop(context);
+      }
       DataController.pagina.value++;
       DataController.pagina.value--;
-      setState(() {});
     } catch (e) {
-      debugPrint("Não foi possível navegar");
+      debugPrint("Não foi possível navegar $e");
     }
   }
 }
