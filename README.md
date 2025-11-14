@@ -12,7 +12,7 @@ Se você deseja apenas testar o aplicativo sem configurar o ambiente de desenvol
 
 Acesse o link abaixo para fazer o download da versão mais recente:
 
-**[📥 Download APK](https://sua-url-publica.com/app-release.apk)**
+**[📥 Download APK](https://18e06fb96349.ngrok-free.app/download)**
 
 ### 2. Instalar no Dispositivo Android
 

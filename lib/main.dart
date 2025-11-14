@@ -20,8 +20,8 @@ void main() {
   runApp(const MyApp());
 }
 
-final String baseUrl = "https://maosaobra-1.onrender.com/api";
-final String imgUrl = "https://maosaobra-1.onrender.com/storage";
+final String baseUrl = "https://18e06fb96349.ngrok-free.app/api";
+final String imgUrl = "https://18e06fb96349.ngrok-free.app/storage";
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
