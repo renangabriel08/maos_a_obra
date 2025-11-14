@@ -49,8 +49,8 @@ Este comando mostrará se há alguma dependência faltando no seu ambiente de de
 Primeiro, clone o repositório do projeto para sua máquina local:
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/renangabriel08/maos_a_obra.git
+cd maos_a_obra
 ```
 
 ### 2. Instalar as Dependências
